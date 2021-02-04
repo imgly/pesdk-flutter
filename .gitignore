@@ -1,0 +1,50 @@
+# OSX
+.DS_Store
+
+# Xcode
+#
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Dart
+.dart_tool/
+.packages
+build/
+pubspec.lock
+doc/api/
+
+# fastlane
+fastlane/report.xml
+fastlane/screenshots
+fastlane/Preview.html
+fastlane/test_output
+
+# CocoaPods
+Pods
+
+# Android Project Folder
+.externalNativeBuild
+.gradle
+.idea
+.cxx
+captures/
+build/
+
+# Android Project Files
+*.iml
+local.properties
+google-services.json

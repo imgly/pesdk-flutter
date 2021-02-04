@@ -1,0 +1,78 @@
+group 'ly.img.flutter.photo_editor_sdk'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.4.10'
+
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'ly.img.android.sdk'
+
+imglyConfig {
+    pesdk {
+        enabled true
+    }
+
+    useInheritanceDependencies true
+
+    modules {
+        include 'ui:core'
+        include 'backend:config-loader'
+    }
+}
+
+def MIN_LY_IMG_ANDROID_SDK_PLUGIN_VERSION = "8.0.9"
+
+task checkVersion {
+    if (imglyConfig.convertToVersionNumber(imglyConfig.getVersion()) < imglyConfig.convertToVersionNumber(MIN_LY_IMG_ANDROID_SDK_PLUGIN_VERSION)) {
+        String WRONG_VERSION = "" +
+                "┌───────────────────────────────────────────────────────────────────────┐\n"+
+                "│ PhotoEditor SDK update required!                                      │\n"+
+                "│ Please update the plugin version in your 'android/build.gradle' file. │\n"+
+                "│ Minimum required dependency: 'ly.img.android.sdk:plugin:${MIN_LY_IMG_ANDROID_SDK_PLUGIN_VERSION}'       │\n"+
+                "│ Your are currently using:    'ly.img.android.sdk:plugin:${imglyConfig.getVersion()}'       │\n"+
+                "└───────────────────────────────────────────────────────────────────────┘\n"
+
+        throw new GradleScriptException(WRONG_VERSION, new IllegalArgumentException(WRONG_VERSION))
+    }
+}
+
+preBuild.dependsOn checkVersion
+
+android {
+    compileSdkVersion 29
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    defaultConfig {
+        minSdkVersion 16
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compileOnly "ly.img.android.sdk:serializer:$imglyConfig.version"
+    compileOnly rootProject.findProject(":imgly_sdk")
+}

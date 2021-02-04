@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="ly.img.flutter.photo_editor_sdk">
+    <application>
+        <provider
+            tools:replace="android:enabled"
+            android:authorities="${applicationId}.IMGLYAutoInit"
+            android:exported="false"
+            android:enabled="false"
+            android:name="ly.img.android.IMGLYAutoInit" />
+    </application>
+</manifest>
