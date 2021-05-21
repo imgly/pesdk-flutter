@@ -32,13 +32,13 @@ class PESDK {
   /// your `pubspec.yaml` file.
   /// Once finished, the editor either returns a [PhotoEditorResult]
   /// or `null` if the editor was dismissed without exporting the image.
-  static Future<PhotoEditorResult> openEditor(
-      {String image,
-      Configuration configuration,
-      Map<String, dynamic> serialization}) async {
+  static Future<PhotoEditorResult?> openEditor(
+      {String? image,
+      Configuration? configuration,
+      Map<String, dynamic>? serialization}) async {
     final result = await _channel.invokeMethod('openEditor', {
-      'image': image,
-      'configuration': configuration?.toJson(),
+      'image': image ?? null,
+      'configuration': configuration?.toJson() ?? null,
       'serialization': serialization == null
           ? null
           : Platform.isIOS
@@ -54,14 +54,14 @@ class PESDK {
 /// Returned if an editor has completed exporting.
 class PhotoEditorResult {
   /// Creates a new [PhotoEditorResult].
-  PhotoEditorResult._({this.image, this.hasChanges, this.serialization});
+  PhotoEditorResult._({this.image,this.hasChanges, this.serialization});
 
   /// The edited image.
-  final String image;
+  final String? image;
 
   /// Indicating whether the image has been
   /// changed at all.
-  final bool hasChanges;
+  final bool? hasChanges;
 
   /// The serialization contains the applied changes. This is only
   /// returned in case `Configuration.export.serialization.enabled` is
