@@ -82,11 +82,16 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
 
             guard let finalPhoto = finalPhotoAsset else { return  nil }
 
-            if let configuration = configurationData {
-                editor = PhotoEditViewController(photoAsset: finalPhoto, configuration: configuration, photoEditModel: photoEditModel)
-            } else {
-                editor = PhotoEditViewController(photoAsset: finalPhoto, photoEditModel: photoEditModel)
-            }
+            //Triple UI Updates Old Code
+//            if let configuration = configurationData {
+//                editor = PhotoEditViewController(photoAsset: finalPhoto, configuration: configuration, photoEditModel: photoEditModel)
+//            } else {
+//                editor = PhotoEditViewController(photoAsset: finalPhoto, photoEditModel: photoEditModel)
+//            }
+            //Triple UI Updates Old Code End
+            //Added For Triple Apply Button
+            editor = PhotoEditViewController(photoAsset: finalPhoto, configuration: self.getTripleConfiguration(configuration: configuration), photoEditModel: photoEditModel)
+            //Added For Triple Apply Button End
             editor.delegate = self
             editor.modalPresentationStyle = .fullScreen
             return editor
@@ -95,6 +100,21 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
         }, configurationData: configuration, serialization: serialization)
     }
 
+    ///Added for triple mobile app ui improvements
+    private func getTripleConfiguration(configuration: IMGLYDictionary?) -> Configuration{
+        let tripleConfig = Configuration.init { builder in
+            if let preconfigured = configuration as? IMGLYDictionary{
+                try? builder.configure(from: preconfigured)
+            }
+            builder.configurePhotoEditViewController { options in
+                options.applyButtonConfigurationClosure = { button in
+                    button.setImage(UIImage.init(named: "ic_check"), for: .normal)
+                }
+            }
+        }
+        return tripleConfig
+    }
+    
     // MARK: - Licensing
 
     /// Unlocks the license from a url.

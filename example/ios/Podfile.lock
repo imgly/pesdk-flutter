@@ -27,11 +27,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/photo_editor_sdk/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   imgly_sdk: d1f4f81098cc21704e3613f7da74625a636a75bc
   imglyKit: cf341e6a4ed2fa0b8070df9f6ec1e71e579cd50f
   photo_editor_sdk: b41af0d163073c52829f9d2fbb21f9b053feb04f
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.0
