@@ -37,7 +37,7 @@ class FlutterPESDK: FlutterIMGLY() {
 
   companion object {
     // This number must be unique. It is public to allow client code to change it if the same value is used elsewhere.
-    var EDITOR_RESULT_ID = 833b6278-a0fe-4466-b703-56a9bae5e46d // GUID
+    var EDITOR_RESULT_ID = 83362784466
   }
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
