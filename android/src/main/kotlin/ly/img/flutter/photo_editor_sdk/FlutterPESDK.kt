@@ -37,7 +37,7 @@ class FlutterPESDK: FlutterIMGLY() {
 
   companion object {
     // This number must be unique. It is public to allow client code to change it if the same value is used elsewhere.
-    var EDITOR_RESULT_ID = 83362784466
+    var PHOTO_EDITOR_RESULT_ID = 29065
   }
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -111,7 +111,7 @@ class FlutterPESDK: FlutterIMGLY() {
     }
 
     readSerialisation(settingsList, serialization, false)
-    startEditor(settingsList, EDITOR_RESULT_ID)
+    startEditor(settingsList, PHOTO_EDITOR_RESULT_ID)
   }
 
   /**
@@ -136,12 +136,12 @@ class FlutterPESDK: FlutterIMGLY() {
       null
     } ?: return false // If intentData is null the result is not from us.
 
-    if (resultCode == Activity.RESULT_CANCELED && requestCode == EDITOR_RESULT_ID) {
+    if (resultCode == Activity.RESULT_CANCELED && requestCode == PHOTO_EDITOR_RESULT_ID) {
       currentActivity?.runOnUiThread {
         this.result?.success(null)
       }
       return true
-    } else if (resultCode == Activity.RESULT_OK && requestCode == EDITOR_RESULT_ID) {
+    } else if (resultCode == Activity.RESULT_OK && requestCode == PHOTO_EDITOR_RESULT_ID) {
       val settingsList = intentData.settingsList
       val serializationConfig = currentConfig?.export?.serialization
       val resultUri = intentData.resultUri
