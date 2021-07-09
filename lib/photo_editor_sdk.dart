@@ -29,13 +29,16 @@ class PESDK {
   /// by re-applying all modifications to the image.
   /// The [image] source should either be a full path, an URI
   /// or if it is an asset the relative path as specified in
-  /// your `pubspec.yaml` file.
-  /// Once finished, the editor either returns a [PhotoEditorResult]
-  /// or `null` if the editor was dismissed without exporting the image.
-  static Future<PhotoEditorResult> openEditor(
-      {String image,
-      Configuration configuration,
-      Map<String, dynamic> serialization}) async {
+  /// your `pubspec.yaml` file. If this parameter is `null`,
+  /// the [serialization] must not be `null` and it must contain
+  /// an embedded source image.
+  /// Once finished, the editor either returns a
+  /// [PhotoEditorResult] or `null` if the editor was dismissed without
+  /// exporting the image.
+  static Future<PhotoEditorResult?> openEditor(
+      {String? image,
+      Configuration? configuration,
+      Map<String, dynamic>? serialization}) async {
     final result = await _channel.invokeMethod('openEditor', {
       'image': image,
       'configuration': configuration?.toJson(),
@@ -54,7 +57,7 @@ class PESDK {
 /// Returned if an editor has completed exporting.
 class PhotoEditorResult {
   /// Creates a new [PhotoEditorResult].
-  PhotoEditorResult._({this.image, this.hasChanges, this.serialization});
+  PhotoEditorResult._(this.image, this.hasChanges, this.serialization);
 
   /// The edited image.
   final String image;
@@ -76,15 +79,12 @@ class PhotoEditorResult {
   /// Creates a [PhotoEditorResult] from the [json] map.
   factory PhotoEditorResult._fromJson(Map<String, dynamic> json) =>
       PhotoEditorResult._(
-          image: json["image"] == null ? null : json["image"],
-          hasChanges: json["hasChanges"] == null ? null : json["hasChanges"],
-          serialization:
-              json["serialization"] == null ? null : json["serialization"]);
+          json["image"], json["hasChanges"], json["serialization"]);
 
   /// Converts the [PhotoEditorResult] for JSON parsing.
   Map<String, dynamic> toJson() => {
-        "image": image == null ? null : image,
-        "hasChanges": hasChanges == null ? null : hasChanges,
-        "serialization": serialization == null ? null : serialization
+        "image": image,
+        "hasChanges": hasChanges,
+        "serialization": serialization
       };
 }

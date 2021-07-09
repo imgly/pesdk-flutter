@@ -40,12 +40,12 @@ class FlutterPESDK: FlutterIMGLY() {
     var EDITOR_RESULT_ID = 29065
   }
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    super.onAttachedToEngine(flutterPluginBinding)
+  override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    super.onAttachedToEngine(binding)
 
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "photo_editor_sdk")
+    channel = MethodChannel(binding.binaryMessenger, "photo_editor_sdk")
     channel.setMethodCallHandler(this)
-    IMGLY.initSDK(flutterPluginBinding.applicationContext)
+    IMGLY.initSDK(binding.applicationContext)
     IMGLY.authorize()
   }
 
