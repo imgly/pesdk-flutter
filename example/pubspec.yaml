@@ -38,7 +38,7 @@ flutter:
   assets:
     - assets/LA.jpg
     - assets/Flutter-logo.png
-    - assets/imgly-Logo.png
+    - assets/IgorSticker.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

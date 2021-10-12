@@ -17,8 +17,7 @@ class _MyAppState extends State<MyApp> {
     final flutterSticker = Sticker(
         "example_sticker_logos_flutter", "Flutter", "assets/Flutter-logo.png");
     final imglySticker = Sticker(
-        "example_sticker_logos_imgly", "img.ly", "assets/imgly-Logo.png",
-        tintMode: TintMode.solid);
+        "example_sticker_logos_imgly", "img.ly", "assets/IgorSticker.png");
 
     /// A completely custom category.
     final logos = StickerCategory(

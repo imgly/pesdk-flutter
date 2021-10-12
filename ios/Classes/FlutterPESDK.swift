@@ -7,6 +7,16 @@ import imgly_sdk
 @available(iOS 9.0, *)
 public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerDelegate {
 
+    // MARK: - Typealias
+
+    /// A closure to modify a new `PhotoEditViewController` before it is presented on screen.
+    public typealias PESDKWillPresentBlock = (_ photoEditViewController: PhotoEditViewController) -> Void
+
+    // MARK: - Properties
+
+    /// Set this closure to modify a new `PhotoEditViewController` before it is presented on screen.
+    public static var willPresentPhotoEditViewController: PESDKWillPresentBlock?
+
     // MARK: - Flutter Channel
 
     /// Registers for the channel in order to communicate with the
@@ -83,12 +93,15 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
             guard let finalPhoto = finalPhotoAsset else { return  nil }
 
             if let configuration = configurationData {
-                editor = PhotoEditViewController(photoAsset: finalPhoto, configuration: configuration, photoEditModel: photoEditModel)
+                editor = PhotoEditViewController.makePhotoEditViewController(photoAsset: finalPhoto, configuration: configuration, photoEditModel: photoEditModel)
             } else {
-                editor = PhotoEditViewController(photoAsset: finalPhoto, photoEditModel: photoEditModel)
+                editor = PhotoEditViewController.makePhotoEditViewController(photoAsset: finalPhoto, photoEditModel: photoEditModel)
             }
             editor.delegate = self
             editor.modalPresentationStyle = .fullScreen
+
+            FlutterPESDK.willPresentPhotoEditViewController?(editor)
+
             return editor
         }, utiBlock: { (configurationData) -> CFString in
             return (configurationData?.photoEditViewControllerOptions.outputImageFileFormatUTI ?? kUTTypeJPEG)

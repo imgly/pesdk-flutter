@@ -1,3 +1,18 @@
+## [2.1.0]
+
+### Added
+
+* [imgly_sdk] Added `ExportOptions.forceExport` which will force the photo/video to be rendered and exported in the defined output format even if no changes have been applied. Otherwise, the input asset will be passed through and might not match the defined output format.
+* [imgly_sdk] Added an interface for native customization on iOS. Set `FlutterIMGLY.configureWithBuilder` to modify the `Configuration` after it has been retrieved from the plugin.
+* [photo_editor_sdk] Added support to replace the `PhotoEditViewController` with custom subclasses on iOS.
+* [photo_editor_sdk] Added `FlutterPESDK.willPresentPhotoEditViewController` allowing access to the `PhotoEditViewController` before it is presented on iOS.
+* [video_editor_sdk] Added support to replace the `VideoEditViewController` with custom subclasses on iOS.
+* [video_editor_sdk] Added `FlutterVESDK.willPresentVideoEditViewController` allowing access to the `VideoEditViewController` before it is presented on iOS.
+
+### Changed
+
+* [video_editor_sdk] Changed the example to use the default `Video` constructor since `Video.composition` is only available when having a valid license for the video composition feature.
+
 ## [2.0.0]
 
 ### Added

@@ -1,3 +1,4 @@
+
 # OSX
 .DS_Store
 
@@ -26,12 +27,6 @@ project.xcworkspace
 build/
 pubspec.lock
 doc/api/
-
-# fastlane
-fastlane/report.xml
-fastlane/screenshots
-fastlane/Preview.html
-fastlane/test_output
 
 # CocoaPods
 Pods

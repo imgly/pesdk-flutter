@@ -1,10 +1,10 @@
 buildscript {
     ext.kotlin_version = '1.4.10'
-    ext.pesdk_version = '8.3.1'
+    ext.pesdk_version = '8.3.4'
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://artifactory.img.ly/artifactory/imgly' }
     }
 
@@ -18,7 +18,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
