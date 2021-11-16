@@ -23,7 +23,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^2.0.0
+  photo_editor_sdk: ^2.2.0
 ```
 
 Install the new dependency:
@@ -57,13 +57,23 @@ flutter pub get
        }
        dependencies {
            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
-           classpath 'ly.img.android.sdk:plugin:8.3.4'
+           classpath 'ly.img.android.sdk:plugin:9.1.0'
        }
    }
    ```
-   In order to update PhotoEditor SDK for Android replace the version string `8.3.4` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
+   In order to update PhotoEditor SDK for Android replace the version string `9.1.0` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
 
-3. Configure PhotoEditor SDK for Android by opening the `android/app/build.gradle` file  (**not** `android/build.gradle`) and adding the following lines under `apply plugin: "com.android.application"`:
+3. Still in the `android/build.gradle` file (**not** `android/app/build.gradle`), add these lines at the bottom:
+
+   ```groovy
+   allprojects {
+       repositories {
+           maven { url 'https://artifactory.img.ly/artifactory/imgly' }
+       }
+   }
+   ```
+
+4. Configure PhotoEditor SDK for Android by opening the `android/app/build.gradle` file  (**not** `android/build.gradle`) and adding the following lines under `apply plugin: "com.android.application"`:
    ```groovy
    apply plugin: 'ly.img.android.sdk'
    apply plugin: 'kotlin-android'

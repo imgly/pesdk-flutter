@@ -1,3 +1,20 @@
+## [2.2.0]
+
+### Changed
+
+* The img.ly maven repository is no longer automatically added to your Android project by the plugin. Please refer to the new step 3 in the [getting started](https://github.com/imgly/vesdk-flutter#android) section of the README for instructions on how to add it.
+* Added support for PhotoEditor SDK and VideoEditor SDK for Android version 9.
+
+### Added
+
+* [video_editor_sdk] Added integration and documentation for force trim.
+* [imgly_sdk] Added `TrimOptions.forceMode`, `TrimOptions.minimumDuration` and `TrimOptions.maximumDuration` to configure the force-trimming behavior. 
+
+### Fixed
+
+* [imgly_sdk] Fixed `TrimOptions` not being exposed for `Configuration.trim`.
+* [imgly_sdk] Fixed `CompositionOptions.clipTrimOptions` using `TrimOptions` instead of `ClipTrimOptions`.
+
 ## [2.1.0]
 
 ### Added

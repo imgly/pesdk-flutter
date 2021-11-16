@@ -20,6 +20,9 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+flutter_export_environment.sh
+**/Flutter/Generated.xcconfig
+**/Flutter/Flutter.podspec
 
 # Dart
 .dart_tool/
