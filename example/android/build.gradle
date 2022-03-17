@@ -1,6 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.4.10'
-    ext.pesdk_version = '9.1.0'
+    ext.pesdk_version = '9.2.0'
 
     repositories {
         google()

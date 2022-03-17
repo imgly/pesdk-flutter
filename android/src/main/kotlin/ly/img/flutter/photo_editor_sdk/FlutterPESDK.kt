@@ -28,6 +28,7 @@ import ly.img.android.pesdk.backend.model.EditorSDKResult
 import ly.img.android.serializer._3.IMGLYFileWriter
 
 import ly.img.flutter.imgly_sdk.FlutterIMGLY
+import java.util.UUID
 
 /**
  * FlutterPESDK
@@ -50,6 +51,11 @@ class FlutterPESDK: FlutterIMGLY() {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    if (this.result != null) {
+      result?.error("Multiple requests.", "Cancelled due to multiple requests.", null)
+      return
+    }
+
     if (call.method == "openEditor") {
       var config = call.argument<MutableMap<String, Any>>("configuration")
       var photo: String? = null
@@ -124,8 +130,10 @@ class FlutterPESDK: FlutterIMGLY() {
       PESDK.initSDKWithLicenseData(license)
       IMGLY.authorize()
       this.result?.success(null)
+      this.result = null
     } catch (e: AuthorizationException) {
       this.result?.error("Invalid license", "The license must be valid.", e.message)
+      this.result = null
     }
   }
 
@@ -139,6 +147,7 @@ class FlutterPESDK: FlutterIMGLY() {
     if (resultCode == Activity.RESULT_CANCELED && requestCode == EDITOR_RESULT_ID) {
       currentActivity?.runOnUiThread {
         this.result?.success(null)
+        this.result = null
       }
       return true
     } else if (resultCode == Activity.RESULT_OK && requestCode == EDITOR_RESULT_ID) {
@@ -156,8 +165,8 @@ class FlutterPESDK: FlutterIMGLY() {
             when (serializationConfig.exportType) {
               SerializationExportType.FILE_URL -> {
                 val uri = serializationConfig.filename?.let {
-                  Uri.parse(it)
-                } ?: Uri.fromFile(File.createTempFile("serialization", ".json"))
+                  Uri.parse("$it.json")
+                } ?: Uri.fromFile(File.createTempFile("serialization-" + UUID.randomUUID().toString(), ".json"))
                 Encoder.createOutputStream(uri).use { outputStream ->
                   IMGLYFileWriter(settingsList).writeJson(outputStream)
                 }
@@ -189,6 +198,7 @@ class FlutterPESDK: FlutterIMGLY() {
       map["serialization"] = serialization
       currentActivity?.runOnUiThread {
         this.result?.success(map)
+        this.result = null
       }
       return true
     }

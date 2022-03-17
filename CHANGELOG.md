@@ -1,3 +1,20 @@
+## [2.3.0]
+
+### Changed
+
+* [imgly_sdk] Removed `WRITE_EXTERNAL_STORAGE` permission request when opening the editor on Android.
+* [imgly_sdk] Aligned emoji support for iOS and Android. Emoji support is not optimized for cross-platform use and disabled by default. Added option `TextOptions.allowEmojis`.
+* [imgly_sdk] Updated documentation for remote resources used in the editor. Remote resources are usable but not optimized and therefore should be downloaded in advance and then passed to the editor as local resources.
+
+### Added
+
+* [imgly_sdk] Added integration and documentation for custom watermark. Use `Configuration.watermark` to add a custom watermark to the image/video.
+
+### Fixed
+
+* Fixed unexpected behavior when invoking multiple requests.
+* [imgly_sdk] Fixed `CompositionOptions.personalVideoClips` would not be resolved correctly on Android.
+
 ## [2.2.0]
 
 ### Changed

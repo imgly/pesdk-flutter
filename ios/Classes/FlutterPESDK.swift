@@ -37,8 +37,8 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
         guard let arguments = call.arguments as? IMGLYDictionary else { return }
 
         if self.result != nil {
-            self.result?(FlutterError(code: "multiple_requests", message: "Cancelled due to multiple requests.", details: nil))
-            self.result = nil
+            result(FlutterError(code: "Multiple requests.", message: "Cancelled due to multiple requests.", details: nil))
+            return
         }
 
         if call.method == "openEditor" {
@@ -84,6 +84,7 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
                         finalPhotoAsset = Photo.from(photoRepresentation: serializationPhoto)
                     } else {
                         self.result?(FlutterError(code: "Photo must not be nil.", message: "The specified serialization did not include a photo.", details: nil))
+                        self.result = nil
                         return nil
                     }
                 }
@@ -158,6 +159,7 @@ extension FlutterPESDK {
             if self.exportType == IMGLYConstants.kExportTypeFileURL {
                 guard let fileURL = self.exportFile else {
                     self.result?(FlutterError(code: "Export type must not be nil.", message: "No valid export type has been specified.", details: self.exportFile))
+                    self.result = nil
                     return
                 }
                 do {
@@ -165,6 +167,7 @@ extension FlutterPESDK {
                     imageString = (self.exportFile?.absoluteString ?? "nil") as NSString
                 } catch let error {
                     self.result?(FlutterError(code: "Image could not be saved.", message: "Error message: \(error.localizedDescription)", details: error))
+                    self.result = nil
                     return
                 }
             } else if self.exportType == IMGLYConstants.kExportTypeDataURL {
@@ -180,6 +183,7 @@ extension FlutterPESDK {
             if self.serializationType == IMGLYConstants.kExportTypeFileURL {
                 guard let exportURL = self.serializationFile else {
                     self.result?(FlutterError(code: "Serialization failed.", message: "The URL must not be nil.", details: nil))
+                    self.result = nil
                     return
                 }
                 do {
@@ -187,12 +191,14 @@ extension FlutterPESDK {
                     serialization = self.serializationFile?.absoluteString
                 } catch let error {
                     self.result?(FlutterError(code: "Serialization failed.", message: error.localizedDescription, details: error))
+                    self.result = nil
                 }
             } else if self.serializationType == IMGLYConstants.kExportTypeObject {
                 do {
                     serialization = try JSONSerialization.jsonObject(with: serializationData, options: .init(rawValue: 0))
                 } catch let error {
                     self.result?(FlutterError(code: "Serialization failed.", message: error.localizedDescription, details: error))
+                    self.result = nil
                 }
             }
         }
@@ -200,6 +206,7 @@ extension FlutterPESDK {
         self.dismiss(mediaEditViewController: photoEditViewController, animated: true) {
             let res: [String: Any?] = ["image": imageString ?? "no image exported", "hasChanges": photoEditViewController.hasChanges, "serialization": serialization]
             self.result?(res)
+            self.result = nil
         }
     }
 
@@ -210,6 +217,7 @@ extension FlutterPESDK {
     public func photoEditViewControllerDidFailToGeneratePhoto(_ photoEditViewController: PhotoEditViewController) {
         self.dismiss(mediaEditViewController: photoEditViewController, animated: true) {
             self.result?(FlutterError(code: "editor_failed", message: "The editor did fail to generate the image.", details: nil))
+            self.result = nil
         }
     }
 
@@ -220,6 +228,7 @@ extension FlutterPESDK {
     public func photoEditViewControllerDidCancel(_ photoEditViewController: PhotoEditViewController) {
         self.dismiss(mediaEditViewController: photoEditViewController, animated: true) {
             self.result?(nil)
+            self.result = nil
         }
     }
 }

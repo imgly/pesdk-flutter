@@ -23,7 +23,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^2.2.0
+  photo_editor_sdk: ^2.3.0
 ```
 
 Install the new dependency:
@@ -57,11 +57,11 @@ flutter pub get
        }
        dependencies {
            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
-           classpath 'ly.img.android.sdk:plugin:9.1.0'
+           classpath 'ly.img.android.sdk:plugin:9.2.0'
        }
    }
    ```
-   In order to update PhotoEditor SDK for Android replace the version string `9.1.0` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
+   In order to update PhotoEditor SDK for Android replace the version string `9.2.0` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
 
 3. Still in the `android/build.gradle` file (**not** `android/app/build.gradle`), add these lines at the bottom:
 
