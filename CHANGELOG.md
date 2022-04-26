@@ -1,3 +1,12 @@
+## [2.4.0]
+
+### Changed
+
+* 🚨 With this version you might need to create symlinks when using Android Gradle Plugin version `4.x`. Please refer to the new [known issues](https://github.com/imgly/pesdk-flutter#known-issues) section of the README for details.
+* 🚨 This version requires `minSdkVersion` `21` for Android. Please refer to the new step 3 in the [getting started](https://github.com/imgly/pesdk-flutter#android) section of the README for instructions on how to adjust it.
+* [video_editor_sdk] Raised minimum VideoEditor SDK for Android version to 10.0.1. See the [changelog](https://github.com/imgly/vesdk-android-demo/blob/master/CHANGELOG.md) for more information.
+* [photo_editor_sdk] Raised minimum PhotoEditor SDK for Android version to 10.0.1. See the [changelog](https://github.com/imgly/pesdk-android-demo/blob/master/CHANGELOG.md) for more information.
+
 ## [2.3.0]
 
 ### Changed

@@ -52,7 +52,7 @@ class FlutterPESDK: FlutterIMGLY() {
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (this.result != null) {
-      result?.error("Multiple requests.", "Cancelled due to multiple requests.", null)
+      result.error("Multiple requests.", "Cancelled due to multiple requests.", null)
       return
     }
 
@@ -94,12 +94,10 @@ class FlutterPESDK: FlutterIMGLY() {
    * @param serialization The serialization to load into the editor if any.
    */
   override fun present(asset: String, config: HashMap<String, Any>?, serialization: String?) {
-    val settingsList = PhotoEditorSettingsList()
-
-    currentSettingsList = settingsList
-    currentConfig = ConfigLoader.readFrom(config ?: mapOf()).also {
-      it.applyOn(settingsList)
-    }
+    val configuration = ConfigLoader.readFrom(config ?: mapOf())
+    val settingsList = PhotoEditorSettingsList(configuration.export?.serialization?.enabled == true)
+    configuration.applyOn(settingsList)
+    currentConfig = configuration
 
     settingsList.configure<LoadSettings> { loadSettings ->
       asset.also {
@@ -151,18 +149,19 @@ class FlutterPESDK: FlutterIMGLY() {
       }
       return true
     } else if (resultCode == Activity.RESULT_OK && requestCode == EDITOR_RESULT_ID) {
-      val settingsList = intentData.settingsList
       val serializationConfig = currentConfig?.export?.serialization
       val resultUri = intentData.resultUri
       val sourceUri = intentData.sourceUri
 
-      val serialization: Any? = if (serializationConfig?.enabled == true) {
+      var serialization: Any? = null
+      if (serializationConfig?.enabled == true) {
+        val settingsList = intentData.settingsList
         skipIfNotExists {
           settingsList.let { settingsList ->
             if (serializationConfig.embedSourceImage == true) {
               Log.i("ImglySDK", "EmbedSourceImage is currently not supported by the Android SDK")
             }
-            when (serializationConfig.exportType) {
+            serialization = when (serializationConfig.exportType) {
               SerializationExportType.FILE_URL -> {
                 val uri = serializationConfig.filename?.let {
                   Uri.parse("$it.json")
@@ -177,12 +176,10 @@ class FlutterPESDK: FlutterIMGLY() {
               }
             }
           }
+          settingsList.release()
         } ?: run {
           Log.i("ImglySDK", "You need to include 'backend:serializer' Module, to use serialisation!")
-          null
         }
-      } else {
-        null
       }
 
       val map = mutableMapOf<String, Any?>()
