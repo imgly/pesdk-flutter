@@ -25,7 +25,10 @@ import ly.img.android.pesdk.utils.UriHelper
 import ly.img.android.sdk.config.*
 import ly.img.android.pesdk.backend.encoder.Encoder
 import ly.img.android.pesdk.backend.model.EditorSDKResult
+import ly.img.android.pesdk.utils.ThreadUtils
 import ly.img.android.serializer._3.IMGLYFileWriter
+import ly.img.android.serializer._3.type.FileMapper
+import ly.img.android.serializer._3.type.IMGLYJsonReader
 
 import ly.img.flutter.imgly_sdk.FlutterIMGLY
 import java.util.UUID
@@ -71,11 +74,26 @@ class FlutterPESDK: FlutterIMGLY() {
         photo = EmbeddedAsset(imageValues).resolvedURI
       }
 
-      if(photo != null) {
+      if (photo != null) {
         this.result = result
-        this.present(asset = photo, config = config, serialization = serialization)
+        this.present(photo, config, serialization)
       } else {
-        result.error("Invalid image location.", "The image can not be nil.", null)
+        if (serialization != null) {
+          val json = IMGLYJsonReader.readJson(serialization, true)
+          val mappedFile = FileMapper.readFrom(json)
+          var imageData = mappedFile.image?.data
+          if (imageData != null) {
+            imageData = "data:base64,$imageData"
+            this.result = result
+            this.present(imageData, config, serialization)
+          } else {
+            result.error("PE.SDK", "The specified serialization did not include a photo.", null)
+            return
+          }
+        } else {
+          result.error("PE.SDK", "No image has been specified or included in the serialization.", null)
+          return
+        }
       }
     } else if (call.method == "unlock") {
       val license = call.argument<String>("license")
@@ -114,6 +132,8 @@ class FlutterPESDK: FlutterIMGLY() {
       }
     }
 
+    applyTheme(settingsList, configuration.theme)
+
     readSerialisation(settingsList, serialization, false)
     startEditor(settingsList, EDITOR_RESULT_ID)
   }
@@ -130,7 +150,7 @@ class FlutterPESDK: FlutterIMGLY() {
       this.result?.success(null)
       this.result = null
     } catch (e: AuthorizationException) {
-      this.result?.error("Invalid license", "The license must be valid.", e.message)
+      this.result?.error("PE.SDK", "The license is invalid.", e.message)
       this.result = null
     }
   }
@@ -149,53 +169,55 @@ class FlutterPESDK: FlutterIMGLY() {
       }
       return true
     } else if (resultCode == Activity.RESULT_OK && requestCode == EDITOR_RESULT_ID) {
-      val serializationConfig = currentConfig?.export?.serialization
-      val resultUri = intentData.resultUri
-      val sourceUri = intentData.sourceUri
+      ThreadUtils.runAsync {
+        val serializationConfig = currentConfig?.export?.serialization
+        val resultUri = intentData.resultUri
+        val sourceUri = intentData.sourceUri
 
-      var serialization: Any? = null
-      if (serializationConfig?.enabled == true) {
-        val settingsList = intentData.settingsList
-        skipIfNotExists {
-          settingsList.let { settingsList ->
-            if (serializationConfig.embedSourceImage == true) {
-              Log.i("ImglySDK", "EmbedSourceImage is currently not supported by the Android SDK")
-            }
-            serialization = when (serializationConfig.exportType) {
-              SerializationExportType.FILE_URL -> {
-                val uri = serializationConfig.filename?.let {
-                  Uri.parse("$it.json")
-                } ?: Uri.fromFile(File.createTempFile("serialization-" + UUID.randomUUID().toString(), ".json"))
-                Encoder.createOutputStream(uri).use { outputStream ->
-                  IMGLYFileWriter(settingsList).writeJson(outputStream)
+        var serialization: Any? = null
+        if (serializationConfig?.enabled == true) {
+          val settingsList = intentData.settingsList
+          skipIfNotExists {
+            settingsList.let { settingsList ->
+              if (serializationConfig.embedSourceImage == true) {
+                Log.e("IMG.LY SDK", "EmbedSourceImage is currently not supported by the Android SDK")
+              }
+              serialization = when (serializationConfig.exportType) {
+                SerializationExportType.FILE_URL -> {
+                  val uri = serializationConfig.filename?.let {
+                    Uri.parse("$it.json")
+                  } ?: Uri.fromFile(File.createTempFile("serialization-" + UUID.randomUUID().toString(), ".json"))
+                  Encoder.createOutputStream(uri).use { outputStream ->
+                    IMGLYFileWriter(settingsList).writeJson(outputStream)
+                  }
+                  uri.toString()
                 }
-                uri.toString()
-              }
-              SerializationExportType.OBJECT -> {
-                jsonToMap(JSONObject(IMGLYFileWriter(settingsList).writeJsonAsString())) as Any?
+                SerializationExportType.OBJECT -> {
+                  jsonToMap(JSONObject(IMGLYFileWriter(settingsList).writeJsonAsString())) as Any?
+                }
               }
             }
+            settingsList.release()
+          } ?: run {
+            Log.e("IMG.LY SDK", "You need to include 'backend:serializer' Module, to use serialisation!")
           }
-          settingsList.release()
-        } ?: run {
-          Log.i("ImglySDK", "You need to include 'backend:serializer' Module, to use serialisation!")
         }
-      }
 
-      val map = mutableMapOf<String, Any?>()
-      map["image"] = when(currentConfig?.export?.image?.exportType) {
-        ImageExportType.DATA_URL -> resultUri.let {
-          val imageSource = ImageSource.create(it)
-          "data:${imageSource.imageFormat.mimeType};base64,${imageSource.asBase64}"
+        val map = mutableMapOf<String, Any?>()
+        map["image"] = when(currentConfig?.export?.image?.exportType) {
+          ImageExportType.DATA_URL -> resultUri.let {
+            val imageSource = ImageSource.create(it)
+            "data:${imageSource.imageFormat.mimeType};base64,${imageSource.asBase64}"
+          }
+          ImageExportType.FILE_URL -> resultUri?.toString()
+          else -> resultUri.toString()
         }
-        ImageExportType.FILE_URL -> resultUri?.toString()
-        else -> resultUri.toString()
-      }
-      map["hasChanges"] = (sourceUri?.path != resultUri?.path)
-      map["serialization"] = serialization
-      currentActivity?.runOnUiThread {
-        this.result?.success(map)
-        this.result = null
+        map["hasChanges"] = (sourceUri?.path != resultUri?.path)
+        map["serialization"] = serialization
+        currentActivity?.runOnUiThread {
+          this.result?.success(map)
+          this.result = null
+        }
       }
       return true
     }

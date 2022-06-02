@@ -38,6 +38,7 @@ imglyConfig {
         include 'ui:transform'
         include 'ui:adjustment'
         include 'ui:text-design'
+        include 'ui:giphy-sticker'
 
         // This module is big, remove the serializer if you don't need that feature.
         include 'backend:serializer'

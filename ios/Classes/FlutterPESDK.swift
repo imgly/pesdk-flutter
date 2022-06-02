@@ -50,8 +50,6 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
             if let assetObject = arguments["image"] as? String,
                let assetURL = EmbeddedAsset(from: assetObject).resolvedURL, let url = URL(string: assetURL) {
                 photo = Photo(url: url)
-            } else {
-                result(FlutterError(code: "Could not load image.", message: nil, details: nil))
             }
             self.present(photo: photo, configuration: configuration, serialization: serialization)
         } else if call.method == "unlock" {
@@ -91,7 +89,11 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
                 photoEditModel = deserializationResult?.model ?? photoEditModel
             }
 
-            guard let finalPhoto = finalPhotoAsset else { return  nil }
+            guard let finalPhoto = finalPhotoAsset else {
+                self.result?(FlutterError(code: "Photo must not be nil.", message: "No image has been specified or included in the serialization.", details: nil))
+                self.result = nil
+                return nil
+            }
 
             if let configuration = configurationData {
                 editor = PhotoEditViewController.makePhotoEditViewController(photoAsset: finalPhoto, configuration: configuration, photoEditModel: photoEditModel)

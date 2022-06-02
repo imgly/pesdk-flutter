@@ -23,7 +23,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^2.4.0
+  photo_editor_sdk: ^2.5.0
 ```
 
 Install the new dependency:
@@ -34,7 +34,7 @@ flutter pub get
 
 ### Known Issues
 
-With version `2.4.0`, we recommend using `compileSdkVersion` not lower than `31.0.0` for Android. However, this might interfere with your application's Android Gradle Plugin version if this is set to `4.x`.
+With version `2.4.0`, we recommend using `compileSdkVersion` not lower than `31` for Android. However, this might interfere with your application's Android Gradle Plugin version if this is set to `4.x`.
 
 If you don't use a newer Android Gradle Plugin version you'll most likely encounter a build error similar to:
 ```
@@ -95,12 +95,12 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
        }
        dependencies {
            ...
-   +       classpath 'ly.img.android.sdk:plugin:10.0.1'
+   +       classpath 'ly.img.android.sdk:plugin:10.1.1'
            ...
        }
    }
    ```
-   In order to update PhotoEditor SDK for Android replace the version string `10.0.1` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
+   In order to update PhotoEditor SDK for Android replace the version string `10.1.1` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
 
 2. Still in the `android/build.gradle` file (**not** `android/app/build.gradle`), add these lines at the bottom:
 

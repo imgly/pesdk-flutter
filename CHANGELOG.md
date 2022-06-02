@@ -1,3 +1,18 @@
+## [2.5.0]
+
+### Added
+
+* [imgly_sdk] Added `ThemeOptions` which enable customizing the UI color scheme with existing or custom runtime `Theme`s on iOS and existing or custom compiletime XML themes on Android.
+* [imgly_sdk] Added `Configuration.toolbarMode` which enables repositioning the toolbar to the top/bottom of the editor on iOS.
+* [video_editor_sdk] Added implementation and documentation for GIPHY sticker integration.
+
+### Fixed
+
+* Fixed enabling serialization would potentially crash the export on Android.
+* [imgly_sdk] Fixed error when running on Android with Flutter 3.
+* [photo_editor_sdk] Fixed error when opening the editor without an image but with a serialization with an embedded image.
+* [video_editor_sdk] Fixed height and width of specified composition size would be flipped on Android.
+
 ## [2.4.0]
 
 ### Changed
