@@ -1,3 +1,15 @@
+## [2.6.0]
+
+### Changed
+
+* 🚨 Bumped iOS deployment target to 13.0.
+* [video_editor_sdk] Raised minimum VideoEditor SDK for iOS version to 11.1.0. See the [changelog](https://github.com/imgly/vesdk-ios-build/blob/master/CHANGELOG.md) for more information.
+* [photo_editor_sdk] Raised minimum PhotoEditor SDK for iOS version to 11.1.0. See the [changelog](https://github.com/imgly/pesdk-ios-build/blob/master/CHANGELOG.md) for more information.
+
+### Added
+
+* [imgly_sdk] Added implementation and documentation for background removal.
+
 ## [2.5.0]
 
 ### Added

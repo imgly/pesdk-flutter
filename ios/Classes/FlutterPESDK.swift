@@ -4,7 +4,7 @@ import CoreServices
 import ImglyKit
 import imgly_sdk
 
-@available(iOS 9.0, *)
+@available(iOS 13.0, *)
 public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerDelegate {
 
     // MARK: - Typealias
@@ -75,9 +75,9 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
             if let finalData = serializationData {
                 var deserializationResult: Deserializer.DeserializationResult?
                 if let photo_ = photo {
-                    deserializationResult = Deserializer.deserialize(data: finalData, imageDimensions: photo_.size, assetCatalog: configurationData?.assetCatalog ?? .shared)
+                    deserializationResult = Deserializer.deserialize(data: finalData, imageDimensions: photo_.size, assetCatalog: configurationData?.assetCatalog ?? .defaultItems)
                 } else {
-                    deserializationResult = Deserializer._objCDeserialize(data: finalData, assetCatalog: configurationData?.assetCatalog ?? .shared)
+                    deserializationResult = Deserializer._objCDeserialize(data: finalData, assetCatalog: configurationData?.assetCatalog ?? .defaultItems)
                     if let serializationPhoto = deserializationResult?.photo {
                         finalPhotoAsset = Photo.from(photoRepresentation: serializationPhoto)
                     } else {
@@ -125,56 +125,53 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
             }
         }
     }
+
+    private func handleError(_ photoEditViewController: PhotoEditViewController, code: String, message: String?, details: Any?) {
+        self.dismiss(mediaEditViewController: photoEditViewController, animated: true) {
+            self.result?(FlutterError(code: code, message: message, details: details))
+            self.result = nil
+        }
+    }
 }
 
 // MARK: - Delegate
 
 /// The delegate for the `PhotoEditViewController`.
-@available(iOS 9.0, *)
+@available(iOS 13.0, *)
 extension FlutterPESDK {
-
     /// Delegate function called when the `PhotoEditViewController` has successfully exported the image.
     /// - Parameter photoEditViewController: The editor who has finished exporting.
-    /// - Parameter image: The exported image.
-    /// - Parameter data: The image data.
-    public func photoEditViewController(_ photoEditViewController: PhotoEditViewController, didSave image: UIImage, and data: Data) {
-        let options = photoEditViewController.configuration.photoEditViewControllerOptions
-        var imageData: Data? = data
-
-        if imageData != nil {
-            switch options.outputImageFileFormat {
-            case .png:
-                imageData = image.pngData()
-                break
-            case .jpeg:
-                imageData = image.jpegData(compressionQuality: options.compressionQuality)
-                break
-            default:
-                break
-            }
+    /// - Parameter result: The `PhotoEditorResult` from the editor.
+    public func photoEditViewControllerDidFinish(_ photoEditViewController: PhotoEditViewController, result: PhotoEditorResult) {
+        guard let uti = result.output.uti else {
+            self.handleError(photoEditViewController, code: "Image could not be saved.", message: nil, details: nil)
+            return
         }
 
-        var imageString: NSString?
+        let imageData = result.output.data
+        var imageString: String?
         var serialization: Any?
 
-        if imageData?.isEmpty == false {
+        if imageData.isEmpty == false {
             if self.exportType == IMGLYConstants.kExportTypeFileURL {
                 guard let fileURL = self.exportFile else {
-                    self.result?(FlutterError(code: "Export type must not be nil.", message: "No valid export type has been specified.", details: self.exportFile))
-                    self.result = nil
+                    self.handleError(photoEditViewController, code: "Export type must not be nil.", message: "No valid export type has been specified.", details: self.exportFile)
                     return
                 }
                 do {
-                    try imageData?.IMGLYwriteToUrl(fileURL, andCreateDirectoryIfNeeded: true)
-                    imageString = (self.exportFile?.absoluteString ?? "nil") as NSString
+                    try imageData.IMGLYwriteToUrl(fileURL, andCreateDirectoryIfNeeded: true)
+                    imageString = fileURL.absoluteString
                 } catch let error {
-                    self.result?(FlutterError(code: "Image could not be saved.", message: "Error message: \(error.localizedDescription)", details: error))
-                    self.result = nil
+                    self.handleError(photoEditViewController, code: "Image could not be saved.", message: "Error message: \(error.localizedDescription)", details: error)
                     return
                 }
             } else if self.exportType == IMGLYConstants.kExportTypeDataURL {
-                let mediaType: NSString? = UTTypeCopyPreferredTagWithClass(options.outputImageFileFormatUTI, kUTTagClassMIMEType)?.takeRetainedValue()
-                imageString = String(format: "data:%@;base64,%@", mediaType!, imageData!.base64EncodedString()) as NSString
+                if let mediaType = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassMIMEType)?.takeRetainedValue() as? NSString {
+                    imageString = String(format: "data:%@;base64,%@", mediaType, imageData.base64EncodedString())
+                } else {
+                    self.handleError(photoEditViewController, code: "Image could not be saved.", message: "The output UTI could not be read.", details: nil)
+                    return
+                }
             }
         }
 
@@ -184,29 +181,28 @@ extension FlutterPESDK {
             }
             if self.serializationType == IMGLYConstants.kExportTypeFileURL {
                 guard let exportURL = self.serializationFile else {
-                    self.result?(FlutterError(code: "Serialization failed.", message: "The URL must not be nil.", details: nil))
-                    self.result = nil
+                    self.handleError(photoEditViewController, code: "Serialization failed.", message: "The URL must not be nil.", details: nil)
                     return
                 }
                 do {
                     try serializationData.IMGLYwriteToUrl(exportURL, andCreateDirectoryIfNeeded: true)
                     serialization = self.serializationFile?.absoluteString
                 } catch let error {
-                    self.result?(FlutterError(code: "Serialization failed.", message: error.localizedDescription, details: error))
-                    self.result = nil
+                    self.handleError(photoEditViewController, code: "Serialization failed.", message: error.localizedDescription, details: error)
+                    return
                 }
             } else if self.serializationType == IMGLYConstants.kExportTypeObject {
                 do {
                     serialization = try JSONSerialization.jsonObject(with: serializationData, options: .init(rawValue: 0))
                 } catch let error {
-                    self.result?(FlutterError(code: "Serialization failed.", message: error.localizedDescription, details: error))
-                    self.result = nil
+                    self.handleError(photoEditViewController, code: "Serialization failed.", message: error.localizedDescription, details: error)
+                    return
                 }
             }
         }
 
         self.dismiss(mediaEditViewController: photoEditViewController, animated: true) {
-            let res: [String: Any?] = ["image": imageString ?? "no image exported", "hasChanges": photoEditViewController.hasChanges, "serialization": serialization]
+            let res: [String: Any?] = ["image": imageString ?? "no image exported", "hasChanges": result.status == .renderedWithChanges, "serialization": serialization]
             self.result?(res)
             self.result = nil
         }
@@ -216,11 +212,9 @@ extension FlutterPESDK {
     /// to export the image.
     ///
     /// - Parameter photoEditViewController: The editor that failed to export.
-    public func photoEditViewControllerDidFailToGeneratePhoto(_ photoEditViewController: PhotoEditViewController) {
-        self.dismiss(mediaEditViewController: photoEditViewController, animated: true) {
-            self.result?(FlutterError(code: "editor_failed", message: "The editor did fail to generate the image.", details: nil))
-            self.result = nil
-        }
+    /// - Parameter error: The `PhotoEditorError` that caused the failure.
+    public func photoEditViewControllerDidFail(_ photoEditViewController: PhotoEditViewController, error: PhotoEditorError) {
+        self.handleError(photoEditViewController, code: "Editor failed", message: "The editor did fail to generate the image.", details: error)
     }
 
     /// Delegate function that is called if the `PhotoEditViewController` has
