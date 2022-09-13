@@ -30,7 +30,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^2.6.0
+  photo_editor_sdk: ^2.7.0
 ```
 
 Install the new dependency:
@@ -44,6 +44,7 @@ flutter pub get
 With version `2.4.0`, we recommend using `compileSdkVersion` not lower than `31` for Android. However, this might interfere with your application's Android Gradle Plugin version if this is set to `4.x`.
 
 If you don't use a newer Android Gradle Plugin version you'll most likely encounter a build error similar to:
+
 ```
 FAILURE: Build failed with an exception.
 
@@ -60,31 +61,35 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
 
 * Get more help at https://help.gradle.org
 ```
+
 **As a workaround you can either:**
 
 1. Upgrade your Android Gradle Plugin version:
 
-    Inside `android/build.gradle` update the version to at least `7.0.0`:
-      ```diff
-      buildscript {
-          ...
-          dependencies {
-      -       classpath 'com.android.tools.build:gradle:4.1.1'
-      +       classpath 'com.android.tools.build:gradle:7.0.0'
-              ...
-          }
-      }
-      ```
+   Inside `android/build.gradle` update the version to at least `7.0.0`:
 
-    After this, you need to update the Gradle version as well in `android/gradle/gradle-wrapper.properties`:
-      ```diff
-      - distributionUrl=https\://services.gradle.org/distributions/gradle-6.7-all.zip
-      + distributionUrl=https\://services.gradle.org/distributions/gradle-7.0.2-all.zip
-      ```
+   ```diff
+   buildscript {
+       ...
+       dependencies {
+   -       classpath 'com.android.tools.build:gradle:4.1.1'
+   +       classpath 'com.android.tools.build:gradle:7.0.0'
+           ...
+       }
+   }
+   ```
+
+   After this, you need to update the Gradle version as well in `android/gradle/gradle-wrapper.properties`:
+
+   ```diff
+   - distributionUrl=https\://services.gradle.org/distributions/gradle-6.7-all.zip
+   + distributionUrl=https\://services.gradle.org/distributions/gradle-7.0.2-all.zip
+   ```
 
 2. **Or** create the following symlinks:
-  - Inside `/Users/YOUR-USERNAME/Library/Android/sdk/build-tools/31.0.0/`: Create a `dx` symlink for the `d8` file with `ln -s d8 dx`.
-  - From there, go to `./lib/` and create a `dx.jar` symlink for the `d8.jar` file with `ln -s d8.jar dx.jar`. 
+
+- Inside `/Users/YOUR-USERNAME/Library/Android/sdk/build-tools/31.0.0/`: Create a `dx` symlink for the `d8` file with `ln -s d8 dx`.
+- From there, go to `./lib/` and create a `dx.jar` symlink for the `d8.jar` file with `ln -s d8.jar dx.jar`.
 
 ### Android
 
@@ -102,12 +107,13 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
        }
        dependencies {
            ...
-   +       classpath 'ly.img.android.sdk:plugin:10.1.1'
+   +       classpath 'ly.img.android.sdk:plugin:10.3.1'
            ...
        }
    }
    ```
-   In order to update PhotoEditor SDK for Android replace the version string `10.1.1` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
+
+   In order to update PhotoEditor SDK for Android replace the version string `10.3.1` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
 
 2. Still in the `android/build.gradle` file (**not** `android/app/build.gradle`), add these lines at the bottom:
 
@@ -119,7 +125,7 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
    }
    ```
 
-3. In the `android/app/build.gradle` file  (**not** `android/build.gradle`) you will need to modify the `minSdkVersion` to at least `21`. We also recommend to update the `buildToolsVersion` to `31.0.0` or higher as well as the `compileSdkVersion` to `31` or higher:
+3. In the `android/app/build.gradle` file (**not** `android/build.gradle`) you will need to modify the `minSdkVersion` to at least `21`. We also recommend to update the `buildToolsVersion` to `31.0.0` or higher as well as the `compileSdkVersion` to `31` or higher:
 
    ```diff
    android {
@@ -137,23 +143,23 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
    }
    ```
 
-    Depending on your **stable** Flutter SDK version (<= `2.5.0`), your `android/app/build.gradle` file might look a bit different. In this case, please modify it in the following way:
+   Depending on your **stable** Flutter SDK version (<= `2.5.0`), your `android/app/build.gradle` file might look a bit different. In this case, please modify it in the following way:
 
-      ```diff
-      android {
-      -   compileSdkVersion 30
-      +   compileSdkVersion 31
-      +   buildToolsVersion "31.0.0"
-          ...
-          defaultConfig {
-              ...
-      -       minSdkVersion 16
-      +       minSdkVersion 21
-              ...
-          }
-          ...
-      }
-      ```
+   ```diff
+   android {
+   -   compileSdkVersion 30
+   +   compileSdkVersion 31
+   +   buildToolsVersion "31.0.0"
+       ...
+       defaultConfig {
+           ...
+   -       minSdkVersion 16
+   +       minSdkVersion 21
+           ...
+       }
+       ...
+   }
+   ```
 
 4. In the same file, configure PhotoEditor SDK for Android by adding the following lines under `apply plugin: "com.android.application"`:
 
@@ -204,6 +210,7 @@ import 'package:imgly_sdk/imgly_sdk.dart';
 Each platform requires a separate license file. [Unlock PhotoEditor SDK](./lib/photo_editor_sdk.dart#L13-L22) with a single line of code for both platforms via platform-specific file extensions.
 
 Rename your license files:
+
 - Android license: `pesdk_license.android`
 - iOS license: `pesdk_license.ios`
 

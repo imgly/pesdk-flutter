@@ -1,3 +1,13 @@
+## [2.7.0]
+
+### Added
+
+* [imgly_sdk] Added `StickerAction.duration` as well as `TextAction.duration` which allow selecting a unique duration for texts and stickers in the video editor.
+
+### Fixed
+
+* [video_editor_sdk] Fixed `Theme` would not be applied if the editor has been initialized with a single video on Android.
+
 ## [2.6.0]
 
 ### Changed

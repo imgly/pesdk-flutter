@@ -1,6 +1,6 @@
 name: photo_editor_sdk
 description: The official Flutter plugin for PhotoEditor SDK. Integrate the photo editor into your own iOS or Android app - in minutes!
-version: 2.6.0
+version: 2.7.0
 homepage: https://www.photoeditorsdk.com
 repository: https://github.com/imgly/pesdk-flutter
 
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  imgly_sdk: 2.6.0
+  imgly_sdk: 2.7.0
 
 dev_dependencies:
   flutter_test:
