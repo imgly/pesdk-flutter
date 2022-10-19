@@ -1,12 +1,12 @@
 PODS:
   - Flutter (1.0.0)
-  - imgly_sdk (2.7.0):
+  - imgly_sdk (2.7.1):
     - Flutter
     - imglyKit (~> 11.3)
-  - imglyKit (11.3.1)
-  - photo_editor_sdk (2.7.0):
+  - imglyKit (11.3.3)
+  - photo_editor_sdk (2.7.1):
     - Flutter
-    - imgly_sdk (= 2.7.0)
+    - imgly_sdk (= 2.7.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -26,11 +26,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/photo_editor_sdk/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  imgly_sdk: d5bd730c962ab5d08c065211e3d0d499dbf402c1
-  imglyKit: 34eb8e0e1a399b815b2a5baf2f5afa3a4fc47105
-  photo_editor_sdk: 42089d2a5a86145420068993f2062da4ab619d59
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  imgly_sdk: e80792e7f6cc62a47d621e11c49f35182f8c2354
+  imglyKit: 5dba5e59e819f4dd1cb65e1591102459c41d006b
+  photo_editor_sdk: 35ba041a579abed60e0c1c10a249c632e6a544cb
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 
 COCOAPODS: 1.10.2

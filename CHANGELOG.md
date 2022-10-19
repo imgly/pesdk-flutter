@@ -1,3 +1,9 @@
+## [2.7.1]
+
+### Fixed
+
+* [video_editor_sdk] Fixed opening the editor with multiple videos would only load the first video.
+
 ## [2.7.0]
 
 ### Added
