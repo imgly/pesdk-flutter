@@ -56,6 +56,8 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
             guard let license = arguments["license"] as? String else { return }
             self.result = result
             self.unlockWithLicense(with: license)
+        } else {
+            result(FlutterMethodNotImplemented)
         }
     }
 
@@ -126,6 +128,13 @@ public class FlutterPESDK: FlutterIMGLY, FlutterPlugin, PhotoEditViewControllerD
         }
     }
 
+    // MARK: - Helpers
+
+    /// Handles an occuring error and closes the editor.
+    /// - Parameter photoEditViewController: The `PhotoEditViewController` that caused the error.
+    /// - Parameter code: The error code.
+    /// - Parameter message: The error message.
+    /// - Parameter details: The error details.
     private func handleError(_ photoEditViewController: PhotoEditViewController, code: String, message: String?, details: Any?) {
         self.dismiss(mediaEditViewController: photoEditViewController, animated: true) {
             self.result?(FlutterError(code: code, message: message, details: details))

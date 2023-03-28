@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.NonNull
+import androidx.annotation.WorkerThread
 
 import java.io.File
 import org.json.JSONObject
@@ -25,6 +26,8 @@ import ly.img.android.pesdk.utils.UriHelper
 import ly.img.android.sdk.config.*
 import ly.img.android.pesdk.backend.encoder.Encoder
 import ly.img.android.pesdk.backend.model.EditorSDKResult
+import ly.img.android.pesdk.backend.model.state.manager.StateHandler
+import ly.img.android.pesdk.ui.activity.PhotoEditorActivity
 import ly.img.android.pesdk.utils.ThreadUtils
 import ly.img.android.serializer._3.IMGLYFileWriter
 import ly.img.android.serializer._3.type.FileMapper
@@ -33,15 +36,18 @@ import ly.img.android.serializer._3.type.IMGLYJsonReader
 import ly.img.flutter.imgly_sdk.FlutterIMGLY
 import java.util.UUID
 
-/**
- * FlutterPESDK
- *
- */
+/** FlutterPESDK */
 class FlutterPESDK: FlutterIMGLY() {
 
   companion object {
     // This number must be unique. It is public to allow client code to change it if the same value is used elsewhere.
     var EDITOR_RESULT_ID = 29065
+
+    /** A closure to modify a *PhotoEditorSettingsList* before the editor is opened. */
+    var editorWillOpenClosure: ((settingsList: PhotoEditorSettingsList) -> Unit)? = null
+
+    /** A closure allowing access to the *StateHandler* before the editor is exporting. */
+    var editorWillExportClosure: ((stateHandler: StateHandler) -> Unit)? = null
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -132,10 +138,10 @@ class FlutterPESDK: FlutterIMGLY() {
       }
     }
 
-    applyTheme(settingsList, configuration.theme)
-
+    editorWillOpenClosure?.invoke(settingsList)
     readSerialisation(settingsList, serialization, false)
-    startEditor(settingsList, EDITOR_RESULT_ID)
+    applyTheme(settingsList, configuration.theme)
+    startEditor(settingsList, EDITOR_RESULT_ID, FlutterPESDKActivity::class.java)
   }
 
   /**
@@ -222,5 +228,15 @@ class FlutterPESDK: FlutterIMGLY() {
       return true
     }
     return false
+  }
+}
+
+/** A *PhotoEditorActivity* used for the native interfaces. */
+class FlutterPESDKActivity: PhotoEditorActivity() {
+  @WorkerThread
+  override fun onExportStart(stateHandler: StateHandler) {
+    FlutterPESDK.editorWillExportClosure?.invoke(stateHandler)
+
+    super.onExportStart(stateHandler)
   }
 }

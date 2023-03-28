@@ -1,3 +1,15 @@
+## [2.8.0]
+
+### Added
+
+* [video_editor_sdk] Added `VideoEditorResult.segments`, `VideoEditorResult.videoSize`, and `VideoEditorResult.release()` which enable serialization of the individual video composition components if `VideoOptions.segments` is enabled.
+* [video_editor_sdk] Added `FlutterVESDK.editorWillOpenClosure` and `FlutterVESDK.editorWillExportClosure` which allow further native configuration on Android.
+* [photo_editor_sdk] Added `FlutterPESDK.editorWillOpenClosure` and `FlutterPESDK.editorWillExportClosure` which allow further native configuration on Android.
+
+### Fixed
+
+* [imgly_sdk] Fixed `TextOptions.canvasActions` would use `StickerCanvasAction` instead of `TextCanvasAction`.
+
 ## [2.7.1]
 
 ### Fixed

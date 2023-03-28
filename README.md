@@ -30,7 +30,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^2.7.1
+  photo_editor_sdk: ^2.8.0
 ```
 
 Install the new dependency:
@@ -107,13 +107,13 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
        }
        dependencies {
            ...
-   +       classpath 'ly.img.android.sdk:plugin:10.4.0'
+   +       classpath 'ly.img.android.sdk:plugin:10.4.1'
            ...
        }
    }
    ```
 
-   In order to update PhotoEditor SDK for Android replace the version string `10.4.0` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
+   In order to update PhotoEditor SDK for Android replace the version string `10.4.1` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
 
 2. Still in the `android/build.gradle` file (**not** `android/app/build.gradle`), add these lines at the bottom:
 
