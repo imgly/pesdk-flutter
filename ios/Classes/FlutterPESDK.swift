@@ -164,14 +164,14 @@ extension FlutterPESDK {
         if imageData.isEmpty == false {
             if self.exportType == IMGLYConstants.kExportTypeFileURL {
                 guard let fileURL = self.exportFile else {
-                    self.handleError(photoEditViewController, code: "Export type must not be nil.", message: "No valid export type has been specified.", details: self.exportFile)
+                  self.handleError(photoEditViewController, code: "Export type must not be nil.", message: "No valid export type has been specified.", details: self.exportFile?.absoluteString)
                     return
                 }
                 do {
                     try imageData.IMGLYwriteToUrl(fileURL, andCreateDirectoryIfNeeded: true)
                     imageString = fileURL.absoluteString
                 } catch let error {
-                    self.handleError(photoEditViewController, code: "Image could not be saved.", message: "Error message: \(error.localizedDescription)", details: error)
+                  self.handleError(photoEditViewController, code: "Image could not be saved.", message: "Error message: \(error.localizedDescription)", details: error.localizedDescription)
                     return
                 }
             } else if self.exportType == IMGLYConstants.kExportTypeDataURL {
@@ -197,14 +197,14 @@ extension FlutterPESDK {
                     try serializationData.IMGLYwriteToUrl(exportURL, andCreateDirectoryIfNeeded: true)
                     serialization = self.serializationFile?.absoluteString
                 } catch let error {
-                    self.handleError(photoEditViewController, code: "Serialization failed.", message: error.localizedDescription, details: error)
+                  self.handleError(photoEditViewController, code: "Serialization failed.", message: error.localizedDescription, details: error.localizedDescription)
                     return
                 }
             } else if self.serializationType == IMGLYConstants.kExportTypeObject {
                 do {
                     serialization = try JSONSerialization.jsonObject(with: serializationData, options: .init(rawValue: 0))
                 } catch let error {
-                    self.handleError(photoEditViewController, code: "Serialization failed.", message: error.localizedDescription, details: error)
+                  self.handleError(photoEditViewController, code: "Serialization failed.", message: error.localizedDescription, details: error.localizedDescription)
                     return
                 }
             }
@@ -223,7 +223,7 @@ extension FlutterPESDK {
     /// - Parameter photoEditViewController: The editor that failed to export.
     /// - Parameter error: The `PhotoEditorError` that caused the failure.
     public func photoEditViewControllerDidFail(_ photoEditViewController: PhotoEditViewController, error: PhotoEditorError) {
-        self.handleError(photoEditViewController, code: "Editor failed", message: "The editor did fail to generate the image.", details: error)
+      self.handleError(photoEditViewController, code: "Editor failed", message: "The editor did fail to generate the image.", details: error.localizedDescription)
     }
 
     /// Delegate function that is called if the `PhotoEditViewController` has

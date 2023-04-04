@@ -1,12 +1,12 @@
 PODS:
   - Flutter (1.0.0)
-  - imgly_sdk (2.8.0):
+  - imgly_sdk (2.8.1):
     - Flutter
     - imglyKit (~> 11.3)
   - imglyKit (11.5.1)
-  - photo_editor_sdk (2.8.0):
+  - photo_editor_sdk (2.8.1):
     - Flutter
-    - imgly_sdk (= 2.8.0)
+    - imgly_sdk (= 2.8.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -27,9 +27,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  imgly_sdk: 35dd26c1125c92f628f3464075ad4c24fcdbce26
+  imgly_sdk: 4ed7b6f244e086715c5c180429164c24f93e5b0b
   imglyKit: b1b3b827799a50b090433ca7c61f90b078944898
-  photo_editor_sdk: 56f45df6fa056f801b1bafe061d06e640ebd1274
+  photo_editor_sdk: 13129f0f63c480ec4a6fcd80445bd41f08285a44
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 

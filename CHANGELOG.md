@@ -1,3 +1,9 @@
+## [2.8.1]
+
+### Fixed
+
+* Fixed errors from the iOS plugin would not be caught.
+
 ## [2.8.0]
 
 ### Added
