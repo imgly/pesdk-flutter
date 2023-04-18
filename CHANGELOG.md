@@ -1,3 +1,9 @@
+## [2.9.0]
+
+### Added
+
+* [imgly_sdk] Added `configuration.singleToolMode` that skips main menu if only one tool is used.
+
 ## [2.8.1]
 
 ### Fixed
