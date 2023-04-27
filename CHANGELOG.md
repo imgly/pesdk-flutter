@@ -1,3 +1,16 @@
+## [3.0.0]
+
+### Changed
+
+* Changed and aligned the error codes for the plugins.
+* [imgly_sdk] Removed custom `Color` class and replaced its usage with the `dart:ui` `Color` class.
+* [video_editor_sdk] Unlocking the license via `VESDK.unlockWithLicense` is now executing asynchronously.
+* [photo_editor_sdk] Unlocking the license via `PESDK.unlockWithLicense` is now executing asynchronously.
+
+### Fixed
+
+* [video_editor_sdk] Fixed tint color of the toolbar would not be applied correctly in the trim tool on iOS.
+
 ## [2.9.0]
 
 ### Added

@@ -30,7 +30,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^2.9.0
+  photo_editor_sdk: ^3.0.0
 ```
 
 Install the new dependency:

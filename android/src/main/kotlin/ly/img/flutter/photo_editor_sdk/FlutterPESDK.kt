@@ -61,7 +61,7 @@ class FlutterPESDK: FlutterIMGLY() {
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (this.result != null) {
-      result.error("Multiple requests.", "Cancelled due to multiple requests.", null)
+      result.error(IMGLYConstants.K_ERROR_MULTIPLE_REQUESTS, "Cancelled due to multiple requests.", null)
       return
     }
 
@@ -93,11 +93,11 @@ class FlutterPESDK: FlutterIMGLY() {
             this.result = result
             this.present(imageData, config, serialization)
           } else {
-            result.error("PE.SDK", "The specified serialization did not include a photo.", null)
+            result.error(IMGLYConstants.K_ERROR_UNABLE_TO_LOAD, "The specified serialization did not include a photo.", null)
             return
           }
         } else {
-          result.error("PE.SDK", "No image has been specified or included in the serialization.", null)
+          result.error(IMGLYConstants.K_ERROR_UNABLE_TO_LOAD, "No image has been specified or included in the serialization.", null)
           return
         }
       }
@@ -156,7 +156,7 @@ class FlutterPESDK: FlutterIMGLY() {
       this.result?.success(null)
       this.result = null
     } catch (e: AuthorizationException) {
-      this.result?.error("PE.SDK", "The license is invalid.", e.message)
+      this.result?.error(IMGLYConstants.K_ERROR_UNABLE_TO_UNLOCK, "The license is invalid.", e.message)
       this.result = null
     }
   }
