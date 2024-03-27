@@ -8,6 +8,8 @@
             android:exported="false"
             android:enabled="false"
             android:name="ly.img.android.IMGLYAutoInit" />
-        <activity android:name="FlutterPESDKActivity" />
+        <activity 
+            android:theme="@style/Theme.Imgly"
+            android:name="FlutterPESDKActivity" />
     </application>
 </manifest>

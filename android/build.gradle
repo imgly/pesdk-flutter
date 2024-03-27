@@ -2,7 +2,7 @@ group 'ly.img.flutter.photo_editor_sdk'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.5.32'
+    ext.kotlin_version = '1.7.21'
 
     repositories {
         google()
@@ -10,7 +10,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:8.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -26,7 +26,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'ly.img.android.sdk'
 
-imglyConfig {
+IMGLY.configure {
     pesdk {
         enabled true
     }
@@ -39,7 +39,7 @@ imglyConfig {
     }
 }
 
-def MIN_LY_IMG_ANDROID_SDK_PLUGIN_VERSION = "10.4.1"
+def MIN_LY_IMG_ANDROID_SDK_PLUGIN_VERSION = "10.9.0"
 
 task checkVersion {
     if (imglyConfig.convertToVersionNumber(imglyConfig.getVersion()) < imglyConfig.convertToVersionNumber(MIN_LY_IMG_ANDROID_SDK_PLUGIN_VERSION)) {
@@ -58,7 +58,10 @@ task checkVersion {
 preBuild.dependsOn checkVersion
 
 android {
-    compileSdkVersion 31
+    if (project.android.hasProperty("namespace")) {
+        namespace 'ly.img.flutter.photo_editor_sdk'
+    }
+    compileSdkVersion 34
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

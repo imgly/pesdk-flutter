@@ -1,3 +1,15 @@
+## [3.1.0]
+
+### Changed
+
+* [video_editor_sdk] Raised minimum VideoEditor SDK for Android version to 10.9.0. See the [migration guide](https://img.ly/docs/vesdk/flutter/getting-started/migration-guides/3-1-0/) for more information.
+* [photo_editor_sdk] Raised minimum PhotoEditor SDK for Android version to 10.9.0. See the [migration guide](https://img.ly/docs/pesdk/flutter/getting-started/migration-guides/3-1-0/) for more information.
+
+### Fixed
+
+* Fixed potential crash on Android: `IllegalStateException "You need to use a Theme.AppCompat theme (or descendant) with this activity."`.
+* Fixed potential compiling issues due to missing namespace for Android.
+
 ## [3.0.0]
 
 ### Changed
@@ -108,7 +120,7 @@
 
 ### Changed
 
-* The img.ly maven repository is no longer automatically added to your Android project by the plugin. Please refer to the new step 3 in the [getting started](https://github.com/imgly/vesdk-flutter#android) section of the README for instructions on how to add it.
+* The IMG.LY maven repository is no longer automatically added to your Android project by the plugin. Please refer to the new step 3 in the [getting started](https://github.com/imgly/vesdk-flutter#android) section of the README for instructions on how to add it.
 * Added support for PhotoEditor SDK and VideoEditor SDK for Android version 9.
 
 ### Added

@@ -30,7 +30,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^3.0.0
+  photo_editor_sdk: ^3.1.0
 ```
 
 Install the new dependency:
@@ -39,66 +39,14 @@ Install the new dependency:
 flutter pub get
 ```
 
-### Known Issues
-
-With version `2.4.0`, we recommend using `compileSdkVersion` not lower than `31` for Android. However, this might interfere with your application's Android Gradle Plugin version if this is set to `4.x`.
-
-If you don't use a newer Android Gradle Plugin version you'll most likely encounter a build error similar to:
-
-```
-FAILURE: Build failed with an exception.
-
-* Where:
-Build file 'flutter_test_application/android/build.gradle' line: 30
-
-* What went wrong:
-A problem occurred evaluating root project 'android'.
-> A problem occurred configuring project ':app'.
-   > Installed Build Tools revision 31.0.0 is corrupted. Remove and install again using the SDK Manager.
-
-* Try:
-Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
-
-* Get more help at https://help.gradle.org
-```
-
-**As a workaround you can either:**
-
-1. Upgrade your Android Gradle Plugin version:
-
-   Inside `android/build.gradle` update the version to at least `7.0.0`:
-
-   ```diff
-   buildscript {
-       ...
-       dependencies {
-   -       classpath 'com.android.tools.build:gradle:4.1.1'
-   +       classpath 'com.android.tools.build:gradle:7.0.0'
-           ...
-       }
-   }
-   ```
-
-   After this, you need to update the Gradle version as well in `android/gradle/gradle-wrapper.properties`:
-
-   ```diff
-   - distributionUrl=https\://services.gradle.org/distributions/gradle-6.7-all.zip
-   + distributionUrl=https\://services.gradle.org/distributions/gradle-7.0.2-all.zip
-   ```
-
-2. **Or** create the following symlinks:
-
-- Inside `/Users/YOUR-USERNAME/Library/Android/sdk/build-tools/31.0.0/`: Create a `dx` symlink for the `d8` file with `ln -s d8 dx`.
-- From there, go to `./lib/` and create a `dx.jar` symlink for the `d8.jar` file with `ln -s d8.jar dx.jar`.
-
 ### Android
 
-1. Add the img.ly repository and plugin by opening the `android/build.gradle` file (**not** `android/app/build.gradle`) and changing the following block:
+1. Add the IMG.LY repository and plugin by opening the `android/build.gradle` file (**not** `android/app/build.gradle`) and changing the following block:
 
    ```diff
    buildscript {
    -   ext.kotlin_version = '1.3.50'
-   +   ext.kotlin_version = '1.5.32' // Minimum version.
+   +   ext.kotlin_version = '1.7.21'
        repositories {
            ...
            mavenCentral()
@@ -107,13 +55,16 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
        }
        dependencies {
            ...
-   +       classpath 'ly.img.android.sdk:plugin:10.4.1'
+   +       classpath 'com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.7.21-1.0.8' // Depending on your `kotlin_version` version.
+   +       classpath 'ly.img.android.sdk:plugin:10.9.0'
            ...
        }
    }
    ```
 
-   In order to update PhotoEditor SDK for Android replace the version string `10.4.1` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
+   The KSP version depends on the Kotlin version that you are using. In order to find the correct version, please visit the [official KSP release page](https://github.com/google/ksp/releases?page=1).
+
+   In order to update PhotoEditor SDK for Android replace the version string `10.9.0` with a [newer release](https://github.com/imgly/pesdk-android-demo/releases).
 
 2. Still in the `android/build.gradle` file (**not** `android/app/build.gradle`), add these lines at the bottom:
 
@@ -125,13 +76,13 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
    }
    ```
 
-3. In the `android/app/build.gradle` file (**not** `android/build.gradle`) you will need to modify the `minSdkVersion` to at least `21`. We also recommend to update the `buildToolsVersion` to `31.0.0` or higher as well as the `compileSdkVersion` to `31` or higher:
+3. In the `android/app/build.gradle` file (**not** `android/build.gradle`) you will need to modify the `minSdkVersion` to at least `21` depending on the version of Flutter that you are using. We also recommend to update the `buildToolsVersion` to `34.0.0` as well as the `compileSdkVersion` to `34`:
 
    ```diff
    android {
    -   compileSdkVersion flutter.compileSdkVersion
-   +   compileSdkVersion 31
-   +   buildToolsVersion "31.0.0"
+   +   compileSdkVersion 34
+   +   buildToolsVersion "34.0.0"
        ...
        defaultConfig {
            ...
@@ -148,8 +99,8 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
    ```diff
    android {
    -   compileSdkVersion 30
-   +   compileSdkVersion 31
-   +   buildToolsVersion "31.0.0"
+   +   compileSdkVersion 34
+   +   buildToolsVersion "34.0.0"
        ...
        defaultConfig {
            ...
@@ -168,7 +119,7 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
    apply plugin: 'kotlin-android'
 
    // Comment out the modules you don't need, to save size.
-   imglyConfig {
+   IMGLY.configure {
        modules {
            include 'ui:text'
            include 'ui:focus'
