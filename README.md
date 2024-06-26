@@ -30,7 +30,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^3.1.0
+  photo_editor_sdk: ^3.2.0
 ```
 
 Install the new dependency:
@@ -165,7 +165,8 @@ Rename your license files:
 - Android license: `pesdk_license.android`
 - iOS license: `pesdk_license.ios`
 
-Pass the file path without the extension to the `unlockWithLicense` function to unlock both iOS and Android:
+The licenses should be located on a project level. We recommend putting them into the `{PROJECT_ROOT}/assets/` folder.
+Pass the relative file path (based on the project root) without the extension to the `unlockWithLicense` function to unlock both iOS and Android:
 
 ```dart
 PESDK.unlockWithLicense("assets/pesdk_license");

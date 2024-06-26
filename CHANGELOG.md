@@ -1,3 +1,13 @@
+## [3.2.0]
+
+### Changed
+
+* Updated minimum supported Flutter SDK version to 3.16.
+
+### Fixed
+
+* Fixed incompatibility with Flutter 3.19+ caused by the deprecation of the imperative Gradle apply script method.
+
 ## [3.1.0]
 
 ### Changed

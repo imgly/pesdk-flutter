@@ -1,30 +1,10 @@
 group 'ly.img.flutter.photo_editor_sdk'
 version '1.0-SNAPSHOT'
 
-buildscript {
-    ext.kotlin_version = '1.7.21'
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
-rootProject.allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'ly.img.android.sdk'
+apply plugin: "com.google.devtools.ksp"
 
 IMGLY.configure {
     pesdk {
@@ -75,7 +55,6 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "ly.img.android.sdk:serializer:$imglyConfig.version"
     compileOnly rootProject.findProject(":imgly_sdk")
 }
