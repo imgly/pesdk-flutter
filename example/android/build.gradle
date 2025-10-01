@@ -11,6 +11,23 @@ allprojects {
         mavenCentral()
         maven { url "https://artifactory.img.ly/artifactory/imgly" }
     }
+    
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            project.android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+            }
+        }
+    
+        if (project.hasProperty('kotlin')) {
+            project.kotlin {
+                jvmToolchain(17)
+            }
+        }
+    }
 }
 
 rootProject.buildDir = '../build'

@@ -59,7 +59,27 @@ IMGLY.configure {
 
 android {
     namespace "ly.img.flutter.photo_editor_sdk_example"
-    compileSdkVersion 34
+    compileSdkVersion 36
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    ksp {
+        arg("jvmTarget", "17")
+    }
+
+    // JVM Toolchain configuration to ensure consistent JVM target
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -72,8 +92,8 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "ly.img.flutter.photo_editor_sdk_example"
-        minSdkVersion 21
-        targetSdkVersion 34
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

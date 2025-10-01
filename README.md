@@ -30,7 +30,7 @@ Add the plugin package to the `pubspec.yaml` file in your project:
 
 ```yaml
 dependencies:
-  photo_editor_sdk: ^3.2.0
+  photo_editor_sdk: ^3.3.0
 ```
 
 Install the new dependency:
@@ -46,7 +46,7 @@ flutter pub get
    ```diff
    buildscript {
    -   ext.kotlin_version = '1.3.50'
-   +   ext.kotlin_version = '1.7.21'
+   +   ext.kotlin_version = '2.1.0'
        repositories {
            ...
            mavenCentral()
@@ -76,13 +76,13 @@ flutter pub get
    }
    ```
 
-3. In the `android/app/build.gradle` file (**not** `android/build.gradle`) you will need to modify the `minSdkVersion` to at least `21` depending on the version of Flutter that you are using. We also recommend to update the `buildToolsVersion` to `34.0.0` as well as the `compileSdkVersion` to `34`:
+3. In the `android/app/build.gradle` file (**not** `android/build.gradle`) you will need to modify the `minSdkVersion` to at least `21` depending on the version of Flutter that you are using. We also recommend to update the `buildToolsVersion` to `35.0.0` as well as the `compileSdkVersion` to `35`:
 
    ```diff
    android {
    -   compileSdkVersion flutter.compileSdkVersion
-   +   compileSdkVersion 34
-   +   buildToolsVersion "34.0.0"
+   +   compileSdkVersion 35
+   +   buildToolsVersion "35.0.0"
        ...
        defaultConfig {
            ...
@@ -99,8 +99,8 @@ flutter pub get
    ```diff
    android {
    -   compileSdkVersion 30
-   +   compileSdkVersion 34
-   +   buildToolsVersion "34.0.0"
+   +   compileSdkVersion 35
+   +   buildToolsVersion "35.0.0"
        ...
        defaultConfig {
            ...

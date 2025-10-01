@@ -41,7 +41,7 @@ android {
     if (project.android.hasProperty("namespace")) {
         namespace 'ly.img.flutter.photo_editor_sdk'
     }
-    compileSdkVersion 34
+    compileSdkVersion 36
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -49,6 +49,25 @@ android {
     defaultConfig {
         minSdkVersion 21
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    
+    ksp {
+        arg("jvmTarget", "17")
+    }
+    
+    // JVM Toolchain configuration to ensure consistent JVM target
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+    
     lintOptions {
         disable 'InvalidPackage'
     }
